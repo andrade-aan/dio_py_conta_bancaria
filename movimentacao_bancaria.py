@@ -16,7 +16,7 @@ LIMITE_SAQUE = 500.0
 QTD_SAQUE_MAX = 3
 
 # Variáveis Globais
-extrato_conta = []
+extrato_conta = list()
 contador_saques = 0
 saldo_conta = 0.0
 
@@ -41,57 +41,68 @@ while True:
     print("99 - SAIR")
     
     opcao = str(input("\nDigite a opção desejada:" +
-                      "\n>>>"))
+                      "\n>>> "))
     
     if opcao == '1':
        
         try:
-            valor_saque = float(input("Digite o valor do saque:"))
+            valor_saque = float(input("\nDigite o valor do saque:" +
+                                      ">>> "))
             if valor_saque < 0:
                 valor_saque *= -1
                 
             if valor_saque > LIMITE_SAQUE:
-                print("Valor máximo permitido para saque é de R$500.00")
+                print("\nValor máximo permitido para saque é de R$500.00")
         
             elif contador_saques >= QTD_SAQUE_MAX:
-                print("Quantidade diária de saques excedida.\nNão é possível realizar mais saques")
+                print("\nQuantidade diária de saques excedida.\n\nNão é possível realizar mais saques!!!")
             
             elif saldo_conta < valor_saque:
-                print("Saldo insuficiente para realizar saque")
+                print("\nSaldo insuficiente para realizar saque!!!")
             
             else:
-                print(f"Saque no valor de R$ {valor_saque:.2f} realizado com sucesso!!!")
-                extrato_conta.append(valor_saque)
+                print(f"\nSaque no valor de R$ {valor_saque:.2f} realizado com sucesso!!!")
+                extrato_conta.append("SAQUE         R$" + str(valor_saque)+"0")
                 saldo_conta = saldo_conta - valor_saque
                 contador_saques += 1
             
         except ValueError:
-            print("Erro ao digitar valor!!! Tente novamente...")
+            print("\nErro ao digitar valor!!! Tente novamente...")
         
     elif opcao == '2':
         
         try:
-            valor_deposito = float(input("Digite o valor do deposito: "))
+            valor_deposito = float(input("\nDigite o valor do deposito: " +
+                                         "\n>>>"))
             
             if valor_deposito <= 0:
-                print("Valor de deposito não pode ser nulo ou negativo...")
+                print("\nValor de deposito não pode ser nulo ou negativo...")
             else:
-                print(f"Depósito no valor de R$ {valor_deposito:.2f} realizado com sucesso!!!")
-                extrato_conta.append(valor_deposito)
+                print(f"\nDepósito no valor de R$ {valor_deposito:.2f} realizado com sucesso!!!")
+                extrato_conta.append("DEPÓSITO      R$" + str(valor_deposito)+"0")
                 saldo_conta = saldo_conta + valor_deposito
         
         except ValueError:
-            print("Erro ao digitar valor!!! Tente novamente...")
+            print("\nErro ao digitar valor!!! Tente novamente...")
             
     elif opcao == '3':
-        print(extrato_conta)
+        
+        borda("EXTRATO - CONTA CORRENTE")
+        print("\n")
+        
+        if not extrato_conta:
+            print("\nNão há movimentações no extrato!!!")
+        
+        for i in range(0, len(extrato_conta)):
+            print(extrato_conta[i]+"\n")
+            
         
     elif opcao == '4':
-        print(saldo_conta)
+        print(f"\nSeu saldo é de R${saldo_conta:.2f} !")
         
     elif opcao == '99':
         print("\n")
-        borda("Obrigado por usar nossos serviços!!! Aplicativo Finalizado...")
+        borda("Obrigado por utilizar nossos serviços!!! Aplicativo Finalizado...")
         break
         
     else:
