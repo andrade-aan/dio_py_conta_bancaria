@@ -22,7 +22,7 @@ QTD_SAQUE_MAX = 3
 
 conta_cliente_ag0001 = 0
 cadastro_cliente_ag0001 = {}
-extrato_conta = list()
+registro_operacoes = {}
 contador_saques = 0
 saldo_conta = 0.0
 
@@ -31,12 +31,12 @@ saldo_conta = 0.0
 def criar_conta():
     global conta_cliente_ag0001
     conta_cliente_ag0001 +=1 
-    digito = (conta_cliente_ag0001*12%11)
+    digito = ((conta_cliente_ag0001-1)%9)
     numero_conta = str("0"+str(conta_cliente_ag0001)+"-"+str(digito))
 
     return numero_conta
     
-def instante():
+def instante(): # registrar data e hora de cada operação do sistema
     operacao_registro_hora = dt.datetime.now()
     reg_hora_operacao_formatado = operacao_registro_hora.strftime("%m/%d/%Y - %H:%M:%S")    
     return reg_hora_operacao_formatado
@@ -51,17 +51,48 @@ def imprimir_extrato():
     print()
 
 def cadastrar_conta():
-    print()
+    cpf_cliente = cadastrar_cpf()
     
-def cadastrar_cliente():
-   
-    borda("Cadastrar novo Cliente")
-   
+    cpf_existe = False
+    
+    dic_copia_cadastro = cadastro_cliente_ag0001.copy()
+    
+    for key in dic_copia_cadastro:
+        
+        if dic_copia_cadastro[key][1] == cpf_cliente:
+            cpf_existe = True
+        
+        if cpf_existe == True:
+        
+            nova_conta_cliente = criar_conta()
+            nome_cliente = cadastro_cliente_ag0001[key][2]
+            endereco_cliente = cadastro_cliente_ag0001[key][3]
+            municipio_cliente = cadastro_cliente_ag0001[key][4]
+            log_data = instante()
+            
+            cadastro_cliente_ag0001[nova_conta_cliente] = [nova_conta_cliente, cpf_cliente, nome_cliente, endereco_cliente, municipio_cliente, log_data]
+            print(f"Conta {nova_conta_cliente} cadastrada com sucesso!!!")
+            
+            dic_copia_cadastro.clear()
+            return False
+    
+    if cpf_existe == False:
+         print("CPF não cadastrado!! Utilize a opção de CADASTRAR CLIENTE para novos correntistas")    
+    
+def cadastrar_cpf():
     cpf_cliente = str(input("Digite o CPF: "))
     #  tratamento para entrada CPF cliente
     tratamento = cpf_cliente.replace(" ", "")
     tratamento1 = tratamento.replace(".", "")
     cpf_cliente = tratamento1.replace("-", "")
+    
+    return cpf_cliente
+
+def cadastrar_cliente():
+   
+    borda("Cadastrar novo Cliente")
+   
+    cpf_cliente = cadastrar_cpf()
     
     # verificação de CPF já existente no cadastro
     cpf_existe = False
@@ -115,13 +146,18 @@ def menu_principal():
 def menu_gerencia():
     borda("Menu de Gerência Agência 0001 - Bem-vindo!")
     print(instante())
-    print("\n1 - CADASTRAR CONTA")
+    print("\n1 - CADASTRAR NOVA CONTA")
     print("2 - CADASTRAR CLIENTE")
     print("3 - LISTAR CLIENTES")
     print("4 - SAIR")
     
     opcao = str(input("\nDigite a opção desejada:" +
                       "\n>>> "))
+    
+    if opcao == '1':
+        instante()
+        cadastrar_conta()
+    
     if opcao == '2':
         instante()
         cadastrar_cliente()
