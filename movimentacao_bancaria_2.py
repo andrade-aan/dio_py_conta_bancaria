@@ -17,7 +17,6 @@ import datetime as dt
 # Variáveis Globais
 
 conta_cliente_ag0001 = 0
-extrato_conta=[]
 
 
 """ MOCKING
@@ -37,9 +36,11 @@ cadastro_cliente_ag0001 = {"01-0": ['01-0', '463', 'Alfa', 'A', 'MS', '08/02/202
 """
 
 cadastro_cliente_ag0001 = {"01-0": ['01-0', '463', 'Alfa', 'A', 'MS', '08/02/2023 - 14:13:32'],
-                            "02-1": ['02-1', '804', 'Bravo', 'B', 'PR', '08/02/2023 - 14:13:39'],
-                            "03-2": ['03-2', '565', 'Charlie', 'C', 'PB', '08/02/2023 - 14:13:40'],
-                            "04-3": ['04-3', '711', 'Delta', 'D', 'SP', '08/02/2023 - 14:13:44']}
+                            "02-1": ['02-1', '804', 'Bravo', 'B', 'PR', '08/02/2023 - 14:33:39'],
+                            "03-2": ['03-2', '565', 'Charlie', 'C', 'PB', '08/02/2023 - 14:43:40'],
+                            "04-3": ['04-3', '711', 'Delta', 'D', 'SP', '08/02/2023 - 14:45:44'],
+                            "05-4": ['05-4', '111', 'Eco', 'E', 'DF', '08/02/2023 - 14:55:44'],
+                            "06-5": ['06-5', '711', 'Delta', 'D', 'SP', '08/02/2023 - 14:59:44']}
 
 
 registro_operacoes = {'08/02/2023 - 17:45:35': ['08/02/2023 - 17:45:35', '01-0', 'DEPÓSITO', 4566.0],
@@ -57,11 +58,13 @@ def criar_conta():
     numero_conta = str("10"+str(conta_cliente_ag0001)+"-"+str(digito))
 
     return numero_conta
+
     
 def instante(): # registrar data e hora de cada operação do sistema
     operacao_registro_hora = dt.datetime.now()
     reg_hora_operacao_formatado = operacao_registro_hora.strftime("%m/%d/%Y - %H:%M:%S")    
     return reg_hora_operacao_formatado
+
 
 def saldo_conta(conta_cliente):
     copia_registro_operacoes = registro_operacoes.copy()
@@ -82,6 +85,7 @@ def saldo_conta(conta_cliente):
     saldo_conta = soma_deposito - soma_saque
     
     return saldo_conta
+
 
 def sacar():
     
@@ -135,6 +139,7 @@ def sacar():
     except ValueError:
         print("\nErro ao digitar valor!!! Tente novamente...")
 
+
 def consultar_contas_cliente(cpf_cliente:str):
         contas_cliente = []
         for key in cadastro_cliente_ag0001:
@@ -186,8 +191,20 @@ def depositar():
     except ValueError:
         print("\nErro ao digitar valor!!! Tente novamente...")
 
-def imprimir_extrato():
+
+def imprimir_extrato(conta_cliente:str):
     print()
+    for key in registro_operacoes:
+        if conta_cliente in registro_operacoes[key][1]:
+            reg = registro_operacoes[key][0]
+            conta = registro_operacoes[key][1]
+            tipo = registro_operacoes[key][2]
+            vlr_opr = registro_operacoes[key][3]
+            
+            print(f"|{reg} | {conta} | {tipo.center(10)}  | {vlr_opr:.2f}")
+
+    print("\nExtrato emitido em ",instante())
+
 
 def cadastrar_conta():
     cpf_cliente = cadastrar_cpf()
@@ -217,6 +234,7 @@ def cadastrar_conta():
     
     if cpf_existe == False:
          print("\n\nCPF não cadastrado!! Utilize a opção de CADASTRAR CLIENTE para novos correntistas")    
+
     
 def cadastrar_cpf():
     cpf_cliente = str(input("Digite o CPF: "))
@@ -226,6 +244,7 @@ def cadastrar_cpf():
     cpf_cliente = tratamento1.replace("-", "")
     
     return cpf_cliente
+
 
 def cadastrar_cliente():
    
@@ -264,7 +283,6 @@ def cadastrar_cliente():
     
     return print(f"\n\nConta n° {nova_conta} criada para {nome_cliente} já disponível para movimentação.")
     
-    
         
 def borda(texto):
     tam = len(texto)
@@ -281,6 +299,7 @@ def menu_principal():
     print("4 - SALDO")
     print("5 - GERENCIA")
     print("99 - SAIR")        
+
 
 def menu_gerencia():
     borda("Menu de Gerência Agência 0001 - Bem-vindo!")
@@ -306,7 +325,8 @@ def menu_gerencia():
         for key, value in cadastro_cliente_ag0001.items():
             print(key, value)    
     
-    
+        
+#Main function    
 
 while True:
     
@@ -331,13 +351,14 @@ while True:
     elif opcao == '3':
         
         borda("EXTRATO - CONTA CORRENTE")
-        print("\n")
+                
+        conta_cliente=str(input("\nDigite a conta para Saldo: "))
         
-        if not extrato_conta:
-            print("\nNão há movimentações no extrato!!!")
+        imprimir_extrato(conta_cliente)
         
-        for i in range(0, len(extrato_conta)):
-            print(extrato_conta[i]+"\n")
+        imprimir_saldo = saldo_conta(conta_cliente)
+        print(f"\n\nO seu saldo na conta n° {conta_cliente} é de R$ {imprimir_saldo:.2f}")
+        
             
     elif opcao == '4':
         
