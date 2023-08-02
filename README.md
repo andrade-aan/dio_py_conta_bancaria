@@ -83,16 +83,12 @@ Respeitei a criação de lista para o cadastro do cliente, contudo, coloquei um 
 ## Exemplo da Construção da função cadastrar_cliente(): 
 
  ```bash
-   
+
 def cadastrar_cliente():
    
     borda("Cadastrar novo Cliente")
    
-    cpf_cliente = str(input("Digite o CPF: "))
-    #  tratamento para entrada CPF cliente
-    tratamento = cpf_cliente.replace(" ", "")
-    tratamento1 = tratamento.replace(".", "")
-    cpf_cliente = tratamento1.replace("-", "")
+    cpf_cliente = cadastrar_cpf()
     
     # verificação de CPF já existente no cadastro
     cpf_existe = False
@@ -100,32 +96,69 @@ def cadastrar_cliente():
     for key in cadastro_cliente_ag0001:
         if cadastro_cliente_ag0001[key][1] == cpf_cliente:
             cpf_exist = True
-            print(f"CPF já cadastrado!!!")
+            print(f"\n\nCPF já cadastrado!!!")
             return False
    
     if cpf_cliente.isnumeric() and cpf_existe==False:
         
-        print(f"CPF {cpf_cliente} cadastrado com éxito: ")
+        print(f"\n\nCPF {cpf_cliente} cadastrado com éxito: ")
         nova_conta=criar_conta()
         log_data = instante()
     
     else:
-        print("CPF inválido!")
+        print("\n\nCPF inválido!")
         return False
     
-    nome_cliente = str(input("Digite o nome: "))    
+    nome_cliente = str(input("\n\nDigite o nome: "))    
 
-    endereco_cliente = str(input("Endereço - Rua/Avenida e número: "))
+    endereco_cliente = str(input("\n\nEndereço - Rua/Avenida e número: "))
     
-    municipio_cliente = str(input("Municipio/UF: "))
+    municipio_cliente = str(input("\n\nMunicipio/UF: "))
     
     novo_cliente = [nova_conta, cpf_cliente, nome_cliente, endereco_cliente, municipio_cliente, log_data]
     
     cadastro_cliente_ag0001[nova_conta] = novo_cliente
     
-    return print(f"Conta n° {nova_conta} criada para {nome_cliente} já disponível para movimentação.")
+    return print(f"\n\nConta n° {nova_conta} criada para {nome_cliente} já disponível para movimentação.")
     
 ```
+## Dicionário para cadastras as operações e Biblioteca datetime
+
+Para realizar a filtragem e segmentação das operações de cada cliente, considerando um cliente para muitas contas, utilizei outro Dicionário com a <strong><i>key</i></strong> sendo a data/hora de cada operação realizada.
+
+De certa forma, foi criado um log para todas as operações da Agência Bancária, não sendo necessária a criação de logs individuais para cada conta de cada cliente. Para recuperar as informações, foi utilizada a <strong><i>key</i></strong> "estrangeira" conta_corrente, possibilitando a criação das funções de saldo e extrato individualizados por conta.
+
+## Utilização da Biblioteca datetime
+```bash
+   
+def instante(): # registrar data e hora de cada operação do sistema
+    operacao_registro_hora = dt.datetime.now()
+    reg_hora_operacao_formatado = operacao_registro_hora.strftime("%m/%d/%Y - %H:%M:%S")    
+    return reg_hora_operacao_formatado
+
+```
+---
+## Método para recuperar os dados das operações bancárias para impressão, recebendo como parâmetro o número da conta bancária
+```bash
+def imprimir_extrato(conta_cliente:str):
+    print()
+    for key in registro_operacoes:
+        if conta_cliente in registro_operacoes[key][1]:
+            reg = registro_operacoes[key][0]
+            conta = registro_operacoes[key][1]
+            tipo = registro_operacoes[key][2]
+            vlr_opr = registro_operacoes[key][3]
+            
+            print(f"|{reg} | {conta} | {tipo.center(10)}  | {vlr_opr:.2f}")
+
+    print("\nExtrato emitido em ",instante())
+
+
+```
+## Exemplo de Saída do Terminal
+<img width="270" alt="image" src="https://github.com/andrade-aan/dio_py_conta_bancaria/assets/111611919/07308b99-26e1-4358-8bad-9d7cab3f832a">
+
+
 
  
 ### GitHub Stats
