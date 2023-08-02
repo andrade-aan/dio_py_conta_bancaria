@@ -1,15 +1,18 @@
-""" 
-DESAFIO DE CÓDIGO
-
-Simulação de movimentação bancária para único cliente, sem considerar diferentes clientes cadastrados.
-
-Conta Bancária com limite de três saques diários no valor máximo de R$500.00 por operação.
-
-Impedir saques que gerem saldo negativo.
-
-Impedir depósitos de valor negativo.
+"""
+Criar funções para as operações depósito, saque e extrato, 
+adicionando novas funcionalidades de cadastro de clientes e de conta bancária.
+Para o cadastro de clientes deverá ser usada uma lista, contendo nome, endereço, data de nascimento e CPF.
+Para o cadastro de CPF a entrada é somente de números, não podendo existir dois CPF no cadastro.
+Armazenar CPF como String
+As contas devem ser armazenadas em lista [agencia, numero_conta, correntista].
+A conta é sequencial e começa em 1.
+Uma conta é vinculada a um único CPF, mas o CPF pode ter mais de uma conta.
+Agencia tem número fixo = 0001
+Poderá ser a adicionada outras funções!
 
 """
+import datetime as dt
+
 # CONSTANTES
 
 LIMITE_SAQUE = 500.0
@@ -19,6 +22,27 @@ QTD_SAQUE_MAX = 3
 extrato_conta = list()
 contador_saques = 0
 saldo_conta = 0.0
+
+def instante():
+    operacao_registro_hora = dt.datetime.now()
+    reg_hora_operacao_formatado = operacao_registro_hora.strftime("%m/%d/%Y - %H:%M:%S")    
+    return reg_hora_operacao_formatado
+
+def sacar():
+    print()
+
+def depositar():
+    print()
+
+def imprimir_extrato():
+    print()
+
+def cadastrar_conta():
+    print()
+    
+def cadastrar_cliente():
+    print()
+
         
 def borda(texto):
     tam = len(texto)
@@ -27,17 +51,30 @@ def borda(texto):
         print('|',texto,'|')
         print('+','-'*tam,'+')
 
-        
-while True:
-    
-    print("\n")
-    borda("Bem-vindo a sua conta corrente")
-        
+
+def menu_principal():
     print("\n1 - SACAR")
     print("2 - DEPOSITAR")
     print("3 - EXTRATO")
     print("4 - SALDO")
-    print("99 - SAIR")
+    print("5 - GERENCIA")
+    print("99 - SAIR")        
+
+def menu_gerencia():
+    borda("Menu de Gerência Agência 0001 - Bem-vindo!")
+    print(instante())
+    print("\n1 - CADASTRAR CONTA")
+    print("2 - CADASTRAR CLIENTE")
+    print("3 - LISTAR CLIENTES")
+    print("4 - SAIR")
+
+while True:
+    
+    print("\n")
+    borda("Bem-vindo a sua conta corrente")
+    
+    print(instante())        
+    menu_principal()
     
     opcao = str(input("\nDigite a opção desejada:" +
                       "\n>>> "))
@@ -98,6 +135,9 @@ while True:
         
     elif opcao == '4':
         print(f"\nSeu saldo é de R${saldo_conta:.2f} !")
+        
+    elif opcao == '5':
+        menu_gerencia()    
         
     elif opcao == '99':
         print("\n")
