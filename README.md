@@ -66,7 +66,7 @@ def borda(texto):
         print('|',texto,'|')
         print('+','-'*tam,'+')
 ```
-
+---
 ## Parte II
 - Criar funções para as operações depósito, saque e extrato, adicionando novas funcionalidades de cadastro de clientes e de conta bancária.
 - Para o cadastro de clientes deverá ser usada uma lista, contendo nome, endereço, data de nascimento e CPF.
@@ -74,6 +74,59 @@ def borda(texto):
 - As contas devem ser armazenadas em lista [agencia, numero_conta, correntista]. A conta é sequencial e começa em 1.
 - Uma conta é vinculada a um único CPF, mas o CPF pode ter mais de uma conta. Agencia tem número fixo = 0001
 - Poderá ser a adicionada outras funções!
+
+O Primeiro passo foi reestruturar o código com base nas novas regras de negócio, incluindo criação de funções para atender as exigências e objetivos.
+
+Procurei definir uma chave-primária para vincular todo o processo, no caso escolhi o número de conta, já que o CPF pode ter várias contas.
+Respeitei a criação de lista para o cadastro do cliente, contudo, coloquei um dicionário com a <strong><i>key</i></strong> sendo a conta_corrente e a lista como <strong><i>value</i></strong>.
+
+## Exemplo da Construção da função cadastrar_cliente(): 
+
+ ```bash
+   
+def cadastrar_cliente():
+   
+    borda("Cadastrar novo Cliente")
+   
+    cpf_cliente = str(input("Digite o CPF: "))
+    #  tratamento para entrada CPF cliente
+    tratamento = cpf_cliente.replace(" ", "")
+    tratamento1 = tratamento.replace(".", "")
+    cpf_cliente = tratamento1.replace("-", "")
+    
+    # verificação de CPF já existente no cadastro
+    cpf_existe = False
+    
+    for key in cadastro_cliente_ag0001:
+        if cadastro_cliente_ag0001[key][1] == cpf_cliente:
+            cpf_exist = True
+            print(f"CPF já cadastrado!!!")
+            return False
+   
+    if cpf_cliente.isnumeric() and cpf_existe==False:
+        
+        print(f"CPF {cpf_cliente} cadastrado com éxito: ")
+        nova_conta=criar_conta()
+        log_data = instante()
+    
+    else:
+        print("CPF inválido!")
+        return False
+    
+    nome_cliente = str(input("Digite o nome: "))    
+
+    endereco_cliente = str(input("Endereço - Rua/Avenida e número: "))
+    
+    municipio_cliente = str(input("Municipio/UF: "))
+    
+    novo_cliente = [nova_conta, cpf_cliente, nome_cliente, endereco_cliente, municipio_cliente, log_data]
+    
+    cadastro_cliente_ag0001[nova_conta] = novo_cliente
+    
+    return print(f"Conta n° {nova_conta} criada para {nome_cliente} já disponível para movimentação.")
+    
+```
+
  
 ### GitHub Stats
 ![](https://github-readme-streak-stats.herokuapp.com/?user=andrade-aan&theme=monokai&hide_border=false)<br/>
