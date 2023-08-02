@@ -19,10 +19,23 @@ LIMITE_SAQUE = 500.0
 QTD_SAQUE_MAX = 3
 
 # Variáveis Globais
+
+conta_cliente_ag0001 = 0
+cadastro_cliente_ag0001 = {}
 extrato_conta = list()
 contador_saques = 0
 saldo_conta = 0.0
 
+
+
+def criar_conta():
+    global conta_cliente_ag0001
+    conta_cliente_ag0001 +=1 
+    digito = (conta_cliente_ag0001*12%11)
+    numero_conta = str("0"+str(conta_cliente_ag0001)+"-"+str(digito))
+
+    return numero_conta
+    
 def instante():
     operacao_registro_hora = dt.datetime.now()
     reg_hora_operacao_formatado = operacao_registro_hora.strftime("%m/%d/%Y - %H:%M:%S")    
@@ -41,8 +54,47 @@ def cadastrar_conta():
     print()
     
 def cadastrar_cliente():
-    print()
+   
+    borda("Cadastrar novo Cliente")
+   
+    cpf_cliente = str(input("Digite o CPF: "))
+    #  tratamento para entrada CPF cliente
+    tratamento = cpf_cliente.replace(" ", "")
+    tratamento1 = tratamento.replace(".", "")
+    cpf_cliente = tratamento1.replace("-", "")
+    
+    # verificação de CPF já existente no cadastro
+    cpf_existe = False
+    
+    for key in cadastro_cliente_ag0001:
+        if cadastro_cliente_ag0001[key][1] == cpf_cliente:
+            cpf_exist = True
+            print(f"CPF já cadastrado!!!")
+            return False
+   
+    if cpf_cliente.isnumeric() and cpf_existe==False:
+        
+        print(f"CPF {cpf_cliente} cadastrado com éxito: ")
+        nova_conta=criar_conta()
+        log_data = instante()
+    
+    else:
+        print("CPF inválido!")
+        return False
+    
+    nome_cliente = str(input("Digite o nome: "))    
 
+    endereco_cliente = str(input("Endereço - Rua/Avenida e número: "))
+    
+    municipio_cliente = str(input("Municipio/UF: "))
+    
+    novo_cliente = [nova_conta, cpf_cliente, nome_cliente, endereco_cliente, municipio_cliente, log_data]
+    
+    cadastro_cliente_ag0001[nova_conta] = novo_cliente
+    
+    return print(f"Conta n° {nova_conta} criada para {nome_cliente} já disponível para movimentação.")
+    
+    
         
 def borda(texto):
     tam = len(texto)
@@ -67,6 +119,19 @@ def menu_gerencia():
     print("2 - CADASTRAR CLIENTE")
     print("3 - LISTAR CLIENTES")
     print("4 - SAIR")
+    
+    opcao = str(input("\nDigite a opção desejada:" +
+                      "\n>>> "))
+    if opcao == '2':
+        instante()
+        cadastrar_cliente()
+    
+    if opcao == '3':
+        instante()
+        for key, value in cadastro_cliente_ag0001.items():
+            print(key, value)    
+    
+    
 
 while True:
     
@@ -75,6 +140,7 @@ while True:
     
     print(instante())        
     menu_principal()
+    
     
     opcao = str(input("\nDigite a opção desejada:" +
                       "\n>>> "))
