@@ -103,11 +103,13 @@ def sacar():
     
     contador_saques=0
     
-    saldo_conta = saldo_conta(conta_cliente)
-    
+       
     try:
         valor_saque = float(input("\nDigite o valor do saque:" +
                                     "\n\n>>> "))
+        
+        sld_conta = saldo_conta(conta_cliente)
+        
         if valor_saque < 0:
             valor_saque *= -1
             
@@ -117,7 +119,7 @@ def sacar():
         elif contador_saques >= QTD_SAQUE_MAX:
             print("\nQuantidade diária de saques excedida.\n\nNão é possível realizar mais saques!!!")
         
-        elif saldo_conta < valor_saque:
+        elif sld_conta < valor_saque:
             print("\nSaldo insuficiente para realizar saque!!!")
         
         else:
