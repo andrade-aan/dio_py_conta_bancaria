@@ -91,6 +91,15 @@ def saldo_conta(conta_cliente):
     return saldo_conta
 
 
+def contador_saques(conta_cliente):
+    contador_saques = 0
+    for key in registro_operacoes:
+        if conta_cliente in registro_operacoes[key][1]:
+            if "SAQUE" in registro_operacoes[key][2]:
+                contador_saques +=1
+
+    return contador_saques
+
 def sacar():
     
     LIMITE_SAQUE = 500.0
@@ -109,14 +118,13 @@ def sacar():
         print("Conta digitada "+'"'+conta_cliente+'"' + " Inexistente!!")
         return False
     
-    contador_saques=0
-    
-       
     try:
         valor_saque = float(input("\nDigite o valor do saque:" +
                                     "\n\n>>> "))
         
         sld_conta = saldo_conta(conta_cliente)
+        
+        ctr_saques = contador_saques(conta_cliente)
         
         if valor_saque < 0:
             valor_saque *= -1
@@ -124,7 +132,7 @@ def sacar():
         if valor_saque > LIMITE_SAQUE:
             print("\nValor máximo permitido para saque é de R$500.00")
     
-        elif contador_saques >= QTD_SAQUE_MAX:
+        elif ctr_saques >= QTD_SAQUE_MAX:
             print("\nQuantidade diária de saques excedida.\n\nNão é possível realizar mais saques!!!")
         
         elif sld_conta < valor_saque:
@@ -137,9 +145,7 @@ def sacar():
             tipo_operacao = "SAQUE"
             
             registro_operacoes[log_data] = [log_data, conta_cliente, tipo_operacao, valor_saque]
-            
-            print(registro_operacoes)
-        
+                    
     except ValueError:
         print("\nErro ao digitar valor!!! Tente novamente...")
 
@@ -188,10 +194,7 @@ def depositar():
             tipo_operacao = "DEPÓSITO"
             
             registro_operacoes[log_data] = [log_data, conta_cliente, tipo_operacao, valor_deposito]
-            
-            print(registro_operacoes)
-            #saldo_conta = saldo_conta + valor_deposito
-    
+                        
     except ValueError:
         print("\nErro ao digitar valor!!! Tente novamente...")
 
