@@ -359,19 +359,30 @@ while True:
         
         borda("EXTRATO - CONTA CORRENTE")
                 
-        conta_cliente=str(input("\nDigite a conta para Saldo: "))
+        conta_cliente=str(input("\nDigite a conta para Emissão de Extrato: "))
         
-        imprimir_extrato(conta_cliente)
-        
-        imprimir_saldo = saldo_conta(conta_cliente)
-        print(f"\n\nO seu saldo na conta n° {conta_cliente} é de R$ {imprimir_saldo:.2f}")
-        
+        controle = False
+        for key in cadastro_cliente_ag0001:
+            if conta_cliente in cadastro_cliente_ag0001[key]:
+                imprimir_extrato(conta_cliente)
+                imprimir_saldo = saldo_conta(conta_cliente)
+                print(f"\nO seu saldo na conta n° {conta_cliente} é de R$ {imprimir_saldo:.2f}")
+                controle = True
+        if controle == False:
+                print(f"\nConta n° {conta_cliente} não cadastrada!!")
             
     elif opcao == '4':
         
+        controle = False
         conta_cliente=str(input("\n\nDigite a conta para Saldo: "))
-        imprimir_saldo = saldo_conta(conta_cliente)
-        print(f"\n\nO seu saldo na conta n° {conta_cliente} é de R$ {imprimir_saldo:.2f}")
+        for key in cadastro_cliente_ag0001:
+            if conta_cliente in cadastro_cliente_ag0001[key]:
+                imprimir_saldo = saldo_conta(conta_cliente)
+                print(f"\nO seu saldo na conta n° {conta_cliente} é de R$ {imprimir_saldo:.2f}")
+                controle = True
+        if controle == False:
+            print(f"\nConta n° {conta_cliente} não cadastrada!!")
+        
         
     elif opcao == '5':
         menu_gerencia()    
